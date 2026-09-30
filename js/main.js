@@ -378,7 +378,8 @@
       const target = $(a.getAttribute('href'));
       if (target) {
         e.preventDefault();
-        lenis ? lenis.scrollTo(target, { offset: -60, duration: 1.6 }) : target.scrollIntoView({ behavior: 'smooth' });
+        const y = sectionTop(target);
+        lenis ? lenis.scrollTo(y, { duration: 1.6 }) : scrollTo({ top: y, behavior: reduceMotion ? 'auto' : 'smooth' });
       }
     }
   });
@@ -455,6 +456,85 @@
     lastY = y;
   }
   addEventListener('scroll', () => onScroll(scrollY), { passive: true });
+
+  /* ---- Wayfinding: "you are here" pill, section menu, header highlight, back to top ---- */
+  const wf = {
+    ui: $('[data-wayfind-ui]'), toggle: $('[data-wayfind-toggle]'), menu: $('[data-wayfind-menu]'),
+    list: $('[data-wayfind-list]'), num: $('[data-wayfind-num]'), label: $('[data-wayfind-label]'),
+    bar: $('[data-wayfind-bar]'), top: $('[data-to-top]'), ring: $('[data-to-top-ring]')
+  };
+  const marks = $$('[data-wayfind]');
+  /* Where a section really starts on the page. Pinned sections (heritage, showcase, menswear,
+     burn test) are shifted by transforms after their pin, so a bounding box lies about them;
+     a ScrollTrigger measured after the pins knows the true scroll position. */
+  const topTriggers = new Map();
+  function sectionTop(el) {
+    if (el.id === 'top') return 0;
+    if (hasGsap && !reduceMotion) {
+      let st = topTriggers.get(el);
+      if (!st) { st = ScrollTrigger.create({ trigger: el, start: 'top top', refreshPriority: -10 }); topTriggers.set(el, st); }
+      return Math.max(0, st.start);
+    }
+    return Math.max(0, el.getBoundingClientRect().top + scrollY - 60);
+  }
+  const pad = n => String(n).padStart(2, '0');
+  const hrefOf = el => el.dataset.wayfindHref || '#' + el.id;
+  // Header links that stand for a section (Silk Care belongs to the Silk Guide link)
+  const navFor = { '#silk-care': '#silk-guide' };
+  $('[data-wayfind-total]').textContent = '/ ' + pad(marks.length);
+  wf.list.innerHTML = marks.map((m, i) =>
+    `<li><a href="${hrefOf(m)}" data-wayfind-link="${i}"><span>${pad(i + 1)}</span>${m.dataset.wayfind}</a></li>`).join('');
+  const links = $$('[data-wayfind-link]', wf.list);
+  let current = -1;
+
+  function setMenu(open) {
+    wf.menu.hidden = !open;
+    wf.toggle.setAttribute('aria-expanded', String(open));
+    if (open) (links[current] || links[0]).focus({ preventScroll: true });
+  }
+  wf.toggle.addEventListener('click', () => setMenu(wf.menu.hidden));
+  wf.list.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('click', e => { if (!wf.menu.hidden && !wf.ui.contains(e.target)) setMenu(false); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !wf.menu.hidden) { setMenu(false); wf.toggle.focus(); }
+  });
+  wf.top.addEventListener('click', () => {
+    lenis ? lenis.scrollTo(0, { duration: 2 }) : scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+    $('.header__logo').focus({ preventScroll: true });
+  });
+
+  function wayfind() {
+    const y = scrollY, vh = innerHeight;
+    const max = document.documentElement.scrollHeight - vh;
+    const p = max > 0 ? Math.min(1, y / max) : 0;
+    // Current section = the last one whose true top has passed 45% of the viewport
+    let idx = 0;
+    marks.forEach((m, i) => { if (sectionTop(m) <= y + vh * .45) idx = i; });
+    if (idx !== current) {
+      current = idx;
+      wf.num.textContent = pad(idx + 1);
+      wf.label.textContent = marks[idx].dataset.wayfind;
+      wf.label.parentElement.classList.remove('is-swap');
+      void wf.label.offsetWidth; // restart the swap animation
+      wf.label.parentElement.classList.add('is-swap');
+      links.forEach((l, i) => l.setAttribute('aria-current', String(i === idx)));
+      const href = hrefOf(marks[idx]);
+      $$('.nav a[href^="#"]').forEach(a => {
+        const on = a.getAttribute('href') === (navFor[href] || href);
+        a.classList.toggle('is-current', on);
+        on ? a.setAttribute('aria-current', 'location') : a.removeAttribute('aria-current');
+      });
+    }
+    wf.bar.style.transform = `scaleX(${p})`;
+    wf.ring.style.strokeDashoffset = String(100 - p * 100);
+    const show = y > vh * .6;
+    wf.ui.classList.toggle('is-on', show);
+    wf.top.classList.toggle('is-on', show);
+    if (!show && !wf.menu.hidden) setMenu(false);
+  }
+  addEventListener('scroll', wayfind, { passive: true });
+  addEventListener('resize', wayfind);
+  wayfind();
 
   // "View" cursor over product images
   const cursor = $('[data-cursor]');
