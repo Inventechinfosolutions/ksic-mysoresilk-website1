@@ -13,6 +13,8 @@
   --maroon-deep: #2a0d12;
   --gold: #b88a3e;
   --gold-soft: #d9b979;
+  --wash: 247, 239, 225; /* light veil behind text over photos; dark in dark mode */
+  --bar: 246, 241, 233;  /* frosted header / floating controls */
 
   --serif: "Cormorant Garamond", "Times New Roman", serif;
   --sans: "Manrope", system-ui, -apple-system, sans-serif;
@@ -127,7 +129,7 @@ html:not(.js) .loader { display: none; }
   position: sticky; top: 0; z-index: 50; height: var(--header-h);
   transition: background .5s var(--ease), transform .5s var(--ease), box-shadow .5s;
 }
-.header.is-scrolled { background: rgba(246, 241, 233, .86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+.header.is-scrolled { background: rgba(var(--bar), .86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
 .header.is-hidden { transform: translateY(-100%); }
 .header__inner { height: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
 .header__logo img { height: 42px; width: auto; }
@@ -349,7 +351,7 @@ html:not(.js) .banner blockquote .w { opacity: 1; }
 .cat:hover img { transform: scale(1.06); }
 .cat__label {
   position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; justify-content: space-between; align-items: center;
-  background: rgba(246, 241, 233, .92); backdrop-filter: blur(8px); padding: 14px 18px; border-radius: 100px;
+  background: rgba(var(--bar), .92); backdrop-filter: blur(8px); padding: 14px 18px; border-radius: 100px;
   font-family: var(--serif); font-size: 22px;
 }
 .cat__label i { font-style: normal; font-family: var(--sans); transition: transform .5s var(--ease); }
@@ -823,7 +825,7 @@ html.no-motion .edit { margin-top: 0; }
 .hero__media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
 .hero__veil {
   position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(90deg, rgba(247, 239, 225, .97) 0%, rgba(247, 239, 225, .92) 26%, rgba(247, 239, 225, .55) 40%, rgba(247, 239, 225, 0) 52%);
+  background: linear-gradient(90deg, rgba(var(--wash), .97) 0%, rgba(var(--wash), .92) 26%, rgba(var(--wash), .55) 40%, rgba(var(--wash), 0) 52%);
 }
 /* Fade the veil out toward the bottom so the magenta silk, brass urli and jasmine stay vivid */
 @media (min-width: 861px) {
@@ -849,21 +851,21 @@ html.no-motion .edit { margin-top: 0; }
 .btn--maroon::before { background: var(--ink); }
 .btn--maroon svg { transition: transform .5s var(--ease); }
 .btn--maroon:hover svg { transform: translateX(4px); }
-.btn--outline { border: 1px solid var(--maroon); color: var(--maroon); background: rgba(247, 239, 225, .9); } /* solid-ish fill stays legible over the silk */
+.btn--outline { border: 1px solid var(--maroon); color: var(--maroon); background: rgba(var(--wash), .9); } /* solid-ish fill stays legible over the silk */
 .btn--outline::before { background: var(--maroon); }
 .btn--outline:hover { color: var(--ivory); }
 .hero__legacy { position: absolute; right: clamp(24px, 6vw, 110px); bottom: clamp(10px, 2.2vh, 22px); z-index: 3; display: grid; justify-items: center; gap: 8px; }
-.hero__legacy p { font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--ink); background: rgba(247, 239, 225, .82); padding: 6px 14px; border-radius: 100px; }
+.hero__legacy p { font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--ink); background: rgba(var(--wash), .82); padding: 6px 14px; border-radius: 100px; }
 .hero__legacy .hero__ornament i { width: 40px; }
 .hero__scroll { color: var(--ink); }
 @media (max-width: 1100px) {
-  .hero__veil { background: linear-gradient(90deg, rgba(247, 239, 225, .97) 0%, rgba(247, 239, 225, .9) 38%, rgba(247, 239, 225, .35) 58%, rgba(247, 239, 225, 0) 72%); }
+  .hero__veil { background: linear-gradient(90deg, rgba(var(--wash), .97) 0%, rgba(var(--wash), .9) 38%, rgba(var(--wash), .35) 58%, rgba(var(--wash), 0) 72%); }
 }
 @media (max-width: 860px) {
   .hero { align-items: flex-end; height: calc(100svh - var(--header-h) - 38px); max-height: none; min-height: 720px; }
   .hero__copy { margin-left: auto; }
   .hero__media img { object-position: 44% top; }
-  .hero__veil { background: linear-gradient(180deg, rgba(247, 239, 225, 0) 30%, rgba(247, 239, 225, .9) 58%, rgba(247, 239, 225, .98) 100%); }
+  .hero__veil { background: linear-gradient(180deg, rgba(var(--wash), 0) 30%, rgba(var(--wash), .9) 58%, rgba(var(--wash), .98) 100%); }
   .hero__content { background: none; padding-top: 0; padding-bottom: 40px; }
   .hero__copy { margin: 0 auto; gap: 12px; }
   .hero__kicker { font-size: 12px; letter-spacing: .2em; }
@@ -881,7 +883,7 @@ html.no-motion .edit { margin-top: 0; }
 .hero__slide.is-active { opacity: 1; visibility: visible; z-index: 2; transition: opacity 1.4s var(--ease), visibility 0s; }
 .hero__slide .hero__content { width: 100%; }
 /* Loom banner already has a cream panel on the left — a lighter veil is enough */
-.hero__veil--soft { background: linear-gradient(90deg, rgba(247, 239, 225, .7) 0%, rgba(247, 239, 225, .45) 28%, rgba(247, 239, 225, 0) 42%); }
+.hero__veil--soft { background: linear-gradient(90deg, rgba(var(--wash), .7) 0%, rgba(var(--wash), .45) 28%, rgba(var(--wash), 0) 42%); }
 .hero__slide--loom .hero__media img { object-position: 50% 40%; }
 
 .hero__dots { position: absolute; left: var(--gutter); bottom: clamp(14px, 2.6vh, 26px); z-index: 4; display: flex; align-items: center; gap: 6px; }
@@ -891,13 +893,13 @@ html.no-motion .edit { margin-top: 0; }
 .hero__dot.is-active span { transform: scaleX(1); } /* JS overrides inline to run it as a countdown */
 .hero__pause {
   width: 28px; height: 28px; margin-left: 4px; border-radius: 50%; display: grid; place-items: center;
-  color: var(--maroon); border: 1px solid rgba(110, 20, 35, .35); background: rgba(247, 239, 225, .8);
+  color: var(--maroon); border: 1px solid rgba(110, 20, 35, .35); background: rgba(var(--wash), .8);
 }
 .hero__pause:hover { background: var(--maroon); color: var(--ivory); }
 
 @media (max-width: 860px) {
   .hero__slide { align-items: flex-end; }
-  .hero__veil--soft { background: linear-gradient(180deg, rgba(247, 239, 225, 0) 30%, rgba(247, 239, 225, .9) 58%, rgba(247, 239, 225, .98) 100%); }
+  .hero__veil--soft { background: linear-gradient(180deg, rgba(var(--wash), 0) 30%, rgba(var(--wash), .9) 58%, rgba(var(--wash), .98) 100%); }
   .hero__slide--loom .hero__media img { object-position: 54% top; }
   .hero__dots { left: auto; right: 16px; top: 14px; bottom: auto; }
 }
@@ -964,7 +966,7 @@ html.no-motion .silk-side .sway { animation: none; }
   opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .5s var(--ease), transform .5s var(--ease); }
 .wayfind.is-on { opacity: 1; transform: none; pointer-events: auto; }
 .wayfind__pill { position: relative; display: flex; align-items: center; gap: 14px; min-height: 48px; padding: 0 18px 2px 16px;
-  border-radius: 100px; background: rgba(251, 248, 243, .94); color: var(--ink); overflow: hidden;
+  border-radius: 100px; background: rgba(var(--bar), .94); color: var(--ink); overflow: hidden;
   box-shadow: 0 10px 30px rgba(42, 13, 18, .14), 0 0 0 1px rgba(28, 24, 20, .06); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   transition: box-shadow .3s var(--ease); }
 .wayfind__pill:hover { box-shadow: 0 14px 36px rgba(42, 13, 18, .2), 0 0 0 1px rgba(184, 138, 62, .45); }
@@ -982,7 +984,7 @@ html.no-motion .silk-side .sway { animation: none; }
 .wayfind__bar i { position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(90deg, var(--gold-soft), var(--gold)); transform-origin: left; transform: scaleX(0); }
 
 .wayfind__menu { width: min(320px, calc(100vw - 32px)); max-height: min(70vh, 520px); overflow: auto; padding: 16px 10px 10px;
-  border-radius: 20px; background: rgba(251, 248, 243, .97); box-shadow: 0 24px 60px rgba(42, 13, 18, .22), 0 0 0 1px rgba(28, 24, 20, .06);
+  border-radius: 20px; background: rgba(var(--bar), .97); box-shadow: 0 24px 60px rgba(42, 13, 18, .22), 0 0 0 1px rgba(28, 24, 20, .06);
   backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); transform-origin: 20% 100%; animation: wayfindOpen .35s var(--ease); }
 .wayfind__menu[hidden] { display: none; }
 @keyframes wayfindOpen { from { opacity: 0; transform: translateY(10px) scale(.97); } to { opacity: 1; transform: none; } }
@@ -997,7 +999,7 @@ html.no-motion .silk-side .sway { animation: none; }
   border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(184, 138, 62, .18); }
 
 .to-top { position: fixed; right: var(--gutter); bottom: 22px; z-index: 60; width: 52px; height: 52px; border-radius: 50%;
-  display: grid; place-items: center; color: var(--maroon); background: rgba(251, 248, 243, .94);
+  display: grid; place-items: center; color: var(--maroon); background: rgba(var(--bar), .94);
   box-shadow: 0 10px 30px rgba(42, 13, 18, .14); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
   opacity: 0; transform: translateY(16px) scale(.9); pointer-events: none; transition: opacity .5s var(--ease), transform .5s var(--ease), box-shadow .3s; }
 .to-top.is-on { opacity: 1; transform: none; pointer-events: auto; }
@@ -1023,3 +1025,79 @@ html.no-motion .wayfind, html.no-motion .to-top, html.no-motion .wayfind__menu {
 @media (prefers-reduced-motion: reduce) {
   .wayfind__label.is-swap > span[data-wayfind-label], .wayfind__menu { animation: none; }
 }
+
+/* =========================================================
+   Dark mode — html[data-theme="dark"], toggled from the header
+   Tokens flip; the showcase and footer were already dark and stay as they are.
+   Product photos sit on white in their own shots, so their frames stay white.
+   ========================================================= */
+.theme-btn { position: relative; color: var(--ink); font-size: 0; }
+.theme-btn svg { position: absolute; transition: transform .5s var(--ease), opacity .35s; }
+.theme-btn__sun { opacity: 0; transform: rotate(-90deg) scale(.6); }
+html[data-theme="dark"] .theme-btn__moon { opacity: 0; transform: rotate(90deg) scale(.6); }
+html[data-theme="dark"] .theme-btn__sun { opacity: 1; transform: none; }
+.theme-btn:focus-visible { outline: 2px solid var(--maroon); outline-offset: 2px; border-radius: 50%; }
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --ivory: #16100e;      /* page */
+  --ivory-2: #1e1714;    /* raised panels */
+  --paper: #1b1412;
+  --ink: #f1e9dd;        /* text — 15.8:1 on page */
+  --ink-2: #d2c4b2;
+  --muted: #a8988a;      /* 6.3:1 on page */
+  --line: rgba(241, 233, 221, .14);
+  --maroon: #d98c95;     /* rose accent — readable as text (7:1) and as a fill under dark text */
+  --gold: #c99b4f;
+  --gold-soft: #dcbd80;
+  --wash: 22, 16, 14;
+  --bar: 27, 20, 18;
+}
+/* Smooth swap when the toggle is pressed (class is added only for the switch itself) */
+html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
+  transition: background-color .45s var(--ease), color .45s var(--ease), border-color .45s var(--ease), fill .45s, stroke .45s !important;
+}
+
+/* White text that sat on maroon now sits on the lighter rose accent */
+html[data-theme="dark"] .cart-btn__count,
+html[data-theme="dark"] .cursor span { color: var(--ivory); }
+/* Gold buttons always carry dark ink */
+html[data-theme="dark"] .btn--gold { color: #1c1814; }
+
+/* Hero and parallax banner are photo-led: they keep the light look (light veil, dark type)
+   in both themes, so the photography reads as designed */
+html[data-theme="dark"] .hero,
+html[data-theme="dark"] .banner {
+  color-scheme: light;
+  --ivory: #f6f1e9; --ivory-2: #efe7da; --paper: #fbf8f3;
+  --ink: #1c1814; --ink-2: #4a423a; --muted: #6b6158; --line: rgba(28, 24, 20, .12);
+  --maroon: #6e1423; --gold: #b88a3e; --gold-soft: #d9b979;
+  --wash: 247, 239, 225; --bar: 246, 241, 233;
+  color: var(--ink);
+}
+
+/* Burn test: charred line and ash need to show on a dark page */
+html[data-theme="dark"] .burn__char { stroke: #8f7f72; }
+html[data-theme="dark"] .burn__powder circle { fill: #a39282; }
+html[data-theme="dark"] .burn__smoke path { stroke: rgba(210, 196, 178, .4); }
+
+/* Floating controls: deeper shadow so they lift off a dark page */
+html[data-theme="dark"] .wayfind__pill, html[data-theme="dark"] .to-top { box-shadow: 0 10px 30px rgba(0, 0, 0, .45), 0 0 0 1px rgba(241, 233, 221, .08); }
+html[data-theme="dark"] .wayfind__menu { box-shadow: 0 24px 60px rgba(0, 0, 0, .55), 0 0 0 1px rgba(241, 233, 221, .08); }
+
+/* Sections that are dark in both themes keep the original palette, so their light
+   type and gold accents render exactly as designed */
+html[data-theme="dark"] .showcase,
+html[data-theme="dark"] .footer,
+html[data-theme="dark"] .mobile-menu,
+html[data-theme="dark"] .loader,
+html[data-theme="dark"] .announce {
+  --ivory: #f6f1e9; --ivory-2: #efe7da; --paper: #fbf8f3;
+  --ink: #1c1814; --ink-2: #4a423a; --muted: #6b6158; --line: rgba(28, 24, 20, .12);
+  --maroon: #6e1423; --gold: #b88a3e; --gold-soft: #d9b979;
+}
+
+/* Header: the theme toggle adds a control — keep links on one line at mid widths */
+.nav a { white-space: nowrap; }
+@media (max-width: 1180px) { .nav { gap: 22px; } }
+@media (max-width: 980px) { .nav { gap: 16px; font-size: 13px; letter-spacing: .04em; } }

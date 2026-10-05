@@ -457,6 +457,27 @@
   }
   addEventListener('scroll', () => onScroll(scrollY), { passive: true });
 
+  /* ---- Theme: light / dark toggle in the header (initial theme — dark by default — is set in <head>) ---- */
+  const themeBtn = $('[data-theme-toggle]');
+  const themeMeta = $('[data-theme-color]');
+  function applyTheme(theme) {
+    const dark = theme === 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    const label = dark ? 'Switch to light mode' : 'Switch to dark mode';
+    themeBtn.setAttribute('aria-pressed', String(dark));
+    themeBtn.setAttribute('aria-label', label);
+    themeBtn.title = label;
+    if (themeMeta) themeMeta.content = dark ? '#16100e' : '#f6f1e9';
+  }
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+  themeBtn.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    const root = document.documentElement;
+    if (!reduceMotion) { root.classList.add('theme-anim'); setTimeout(() => root.classList.remove('theme-anim'), 500); }
+    applyTheme(next);
+    try { localStorage.setItem('ksic-theme', next); } catch (e) { /* private mode: theme still switches */ }
+  });
+
   /* ---- Wayfinding: "you are here" pill, section menu, header highlight, back to top ---- */
   const wf = {
     ui: $('[data-wayfind-ui]'), toggle: $('[data-wayfind-toggle]'), menu: $('[data-wayfind-menu]'),
